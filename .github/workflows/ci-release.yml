@@ -1,0 +1,61 @@
+name: Release Merge Queue
+
+# Release merge queue, actual implementation is in the ci-release subdirectory
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+on:   
+  push:
+    # Only listen for pushes to the "release" branch
+    branches:
+      - release
+      - add-ci-release-gh-action   # for testing
+    # Ignore pushes on tags to prevent two uploads of codecov reports
+    tags-ignore: ['**']
+
+jobs:
+  build:
+    name: Build and test release candidate
+    if: github.repository == 'vbraun/sage'
+    strategy:
+      matrix:
+        platform: [macOS-ARM64]
+    runs-on: [self-hosted, "${{ matrix.platform }}"]
+    steps:
+      - uses: actions/checkout@v5
+      - name: 'Git log'
+        shell: bash
+        run: |
+          ls -alt
+          git log --graph --oneline -n 20
+      - name: Bootstrap
+        shell: bash
+        run:
+          make -f .github/workflows/ci-release/Makefile bootstrap
+      - name: Configure
+        shell: bash
+        run:
+          make -f .github/workflows/ci-release/Makefile configure
+      - name: Build
+        shell: bash
+        env:
+          SAGE_SERVER: http://sagepad.org/
+        run: |
+          make -f .github/workflows/ci-release/Makefile build
+      - name: Checking startup time
+        shell: bash
+        run: |
+          ./sage --startuptime
+      - name: Run testsuite
+        shell: bash
+        env:
+          # Poison proxies to disallow internet connection
+          http_proxy: 'http://192.0.2.0:5187/'
+          https_proxy': 'http://192.0.2.0:5187/'
+          ftp_proxy': 'http://192.0.2.0:5187/'
+          rsync_proxy': 'http://192.0.2.0:5187/'
+          # DOT_SAGE: should be unique for the test run (TODO)
+        run: |
+          make -f .github/workflows/ci-release/Makefile test
