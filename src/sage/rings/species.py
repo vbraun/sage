@@ -2575,8 +2575,7 @@ class PolynomialSpeciesElement(CombinatorialFreeModule.Element):
             sage: F._compose_with_weighted_singletons(["X0", "X1", "Y0"], [1, 1, 1], [[1, 1], [2]])
             X0*X1*E_2(Y0) + 2*X0*X1*Y0^2
 
-        The weights may be indeterminates in the base ring.  For example,
-        writing `R.<q> = QQ[]`::
+        The weights may be indeterminates in the base ring::
 
             sage: R.<q> = QQ[]
             sage: P = PolynomialSpecies(R, ["X"])
