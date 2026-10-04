@@ -2495,7 +2495,7 @@ class PolynomialSpeciesElement(CombinatorialFreeModule.Element):
 
         The `k`-sort species ``self`` should be homogeneous.
 
-        The entries of `multiplicities` are elements of the base ring.  They
+        The entries of ``multiplicities`` are elements of the base ring.  They
         are weights, not necessarily integer multiplicities.  The unweighted
         composition with the corresponding singleton species is computed first;
         the result is then combined by a Hadamard product with the exponential
@@ -2527,7 +2527,7 @@ class PolynomialSpeciesElement(CombinatorialFreeModule.Element):
         - ``names`` -- the (flat) list of names of the result
 
         - ``multiplicities`` -- a (flat) list of elements of the base
-          ring, of the same length as `names`; these are the weights
+          ring, of the same length as ``names``; these are the weights
           of the singleton species
 
         - ``degrees`` -- a `k`-tuple of compositions `c_1, \ldots,
