@@ -2202,7 +2202,7 @@ class PolynomialSpeciesElement(CombinatorialFreeModule.Element):
         """
         return self.is_molecular() and len(self.support()[0]) == 1
 
-    def is_singleton(self):
+    def is_singleton(self) -> bool:
         r"""
         Return whether this is one of the singleton species of the parent.
 
