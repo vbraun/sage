@@ -1266,7 +1266,7 @@ class GRSBerlekampWelchDecoder(Decoder):
 
         - ``r`` -- a vector of the ambient space of ``self.code()``
 
-        OUTPUT: a vector of ``self`` message space
+        OUTPUT: a polynomial in the message space of ``self``
 
         EXAMPLES::
 
@@ -1315,7 +1315,7 @@ class GRSBerlekampWelchDecoder(Decoder):
 
     def decode_to_code(self, r):
         r"""
-        Correct the errors in ``r`` and returns a codeword.
+        Correct the errors in ``r`` and return a codeword.
 
         .. NOTE::
 
@@ -1642,7 +1642,7 @@ class GRSGaoDecoder(Decoder):
 
         - ``r`` -- a vector of the ambient space of ``self.code()``
 
-        OUTPUT: a vector of ``self`` message space
+        OUTPUT: a polynomial in the message space of ``self``
 
         EXAMPLES::
 
@@ -1691,7 +1691,7 @@ class GRSGaoDecoder(Decoder):
 
     def decode_to_code(self, r):
         r"""
-        Correct the errors in ``r`` and returns a codeword.
+        Correct the errors in ``r`` and return a codeword.
 
         .. NOTE::
 
@@ -2232,7 +2232,7 @@ class GRSKeyEquationSyndromeDecoder(Decoder):
 
     def decode_to_code(self, r):
         r"""
-        Correct the errors in ``r`` and returns a codeword.
+        Correct the errors in ``r`` and return a codeword.
 
         .. NOTE::
 
