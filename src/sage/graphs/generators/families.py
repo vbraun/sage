@@ -68,13 +68,51 @@ def JohnsonGraph(n, k, immutable=False):
         sage: g = graphs.JohnsonGraph(5,2)
         sage: g.complement().is_isomorphic(graphs.PetersenGraph())
         True
+
+    The Johnson graphs `K(n, k)` and `K(n, n - k)` are isomorphic::
+
+        sage: n = randint(0, 7)
+        sage: k = randint(0, n)
+        sage: g = graphs.JohnsonGraph(n, k)
+        sage: h = graphs.JohnsonGraph(n, n - k)
+        sage: g.is_isomorphic(h)
+        True
+
+    TESTS::
+
+        sage: g = graphs.JohnsonGraph(4, 0)
+        sage: g.vertices(), g.edges()
+        ([{}], [])
+        sage: g = graphs.JohnsonGraph(4, 4)
+        sage: g.vertices(), g.edges()
+        ([{0, 1, 2, 3}], [])
+        sage: graphs.JohnsonGraph(-1, 1)
+        Traceback (most recent call last):
+        ...
+        ValueError: n must be greater than or equal to 0
+        sage: graphs.JohnsonGraph(1, -1)
+        Traceback (most recent call last):
+        ...
+        ValueError: k must be such that 0 <= k <= n
+        sage: graphs.JohnsonGraph(1, 2)
+        Traceback (most recent call last):
+        ...
+        ValueError: k must be such that 0 <= k <= n
     """
     from sage.combinat.subset import Set, Subsets
 
+    if n < 0:
+        raise ValueError("n must be greater than or equal to 0")
+    if k < 0 or n < k:
+        raise ValueError("k must be such that 0 <= k <= n")
+
     S = Set(range(n))
-    edges = ((sub + Set([i]), sub + Set([j]))
-             for sub in Subsets(S, k - 1)
-             for i, j in combinations(S - sub, 2))
+    if not k or k == n:
+        edges = []
+    else:
+        edges = ((sub + Set([i]), sub + Set([j]))
+                 for sub in Subsets(S, k - 1)
+                 for i, j in combinations(S - sub, 2))
 
     return Graph([Subsets(S, k), edges], format="vertices_and_edges",
                  name=f"Johnson graph with parameters {n},{k}",
