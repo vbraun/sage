@@ -75,17 +75,17 @@ def JohnsonGraph(n, k, immutable=False):
         sage: k = randint(0, n)
         sage: g = graphs.JohnsonGraph(n, k)
         sage: h = graphs.JohnsonGraph(n, n - k)
-        sage: g.is_isomorphic(h)
+        sage: g.is_isomorphic(h)  # long time
         True
 
     TESTS::
 
         sage: g = graphs.JohnsonGraph(4, 0)
         sage: g.vertices(), g.edges()
-        ([{}], [])
+        ([()], [])
         sage: g = graphs.JohnsonGraph(4, 4)
         sage: g.vertices(), g.edges()
-        ([{0, 1, 2, 3}], [])
+        ([(0, 1, 2, 3)], [])
         sage: graphs.JohnsonGraph(-1, 1)
         Traceback (most recent call last):
         ...
@@ -99,22 +99,16 @@ def JohnsonGraph(n, k, immutable=False):
         ...
         ValueError: k must be such that 0 <= k <= n
     """
-    from sage.combinat.subset import Set, Subsets
-
     if n < 0:
         raise ValueError("n must be greater than or equal to 0")
     if k < 0 or n < k:
         raise ValueError("k must be such that 0 <= k <= n")
 
-    S = Set(range(n))
-    if not k or k == n:
-        edges = []
-    else:
-        edges = ((sub + Set([i]), sub + Set([j]))
-                 for sub in Subsets(S, k - 1)
-                 for i, j in combinations(S - sub, 2))
-
-    return Graph([Subsets(S, k), edges], format="vertices_and_edges",
+    vertices = combinations(range(n), k)
+    edges = ((sub1, sub2)
+             for sup in combinations(range(n), k + 1)
+             for sub1, sub2 in combinations(combinations(sup, k), 2))
+    return Graph([vertices, edges], format="vertices_and_edges",
                  name=f"Johnson graph with parameters {n},{k}",
                  immutable=immutable)
 
